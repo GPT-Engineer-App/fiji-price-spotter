@@ -4,7 +4,21 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Search, Eye, Percent, ArrowDownIcon, ArrowUpIcon } from 'lucide-react';
+import { Search, Eye, Percent, ArrowDownIcon, ArrowUpIcon, ShoppingCart } from 'lucide-react';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const PriceComparison = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,11 +57,11 @@ const PriceComparison = () => {
   ];
 
   const getBestDeal = (prices) => {
-    let bestDeal = { shop: '', price: Infinity };
+    let bestDeal = { shop: '', price: Infinity, discount: 0 };
     Object.entries(prices).forEach(([shop, { price, discount }]) => {
       const discountedPrice = price * (1 - discount / 100);
       if (discountedPrice < bestDeal.price) {
-        bestDeal = { shop, price: discountedPrice };
+        bestDeal = { shop, price: discountedPrice, discount };
       }
     });
     return bestDeal;
@@ -129,15 +143,55 @@ const PriceComparison = () => {
                       </TableCell>
                     ))}
                     <TableCell>
-                      <Badge className="bg-primary text-white">
-                        {bestDeal.shop}: ${bestDeal.price.toFixed(2)}
-                      </Badge>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Badge className="bg-primary text-white cursor-help">
+                              {bestDeal.shop}: ${bestDeal.price.toFixed(2)}
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Save ${(Math.max(...Object.values(product.prices).map(p => p.price)) - bestDeal.price).toFixed(2)} compared to the highest price</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </TableCell>
                     <TableCell>
-                      <Button variant="outline" size="sm" className="pill-button">
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" className="pill-button">
+                            <Eye className="mr-2 h-4 w-4" />
+                            View Details
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>{product.name}</DialogTitle>
+                            <DialogDescription>Detailed price comparison</DialogDescription>
+                          </DialogHeader>
+                          <div className="grid gap-4 py-4">
+                            {Object.entries(product.prices).map(([shop, { price, discount }]) => (
+                              <div key={shop} className="flex items-center justify-between">
+                                <span>{shop}</span>
+                                <div className="text-right">
+                                  <span className={discount > 0 ? "line-through text-gray-500 mr-2" : "mr-2"}>
+                                    ${price.toFixed(2)}
+                                  </span>
+                                  {discount > 0 && (
+                                    <span className="text-accent font-bold">
+                                      ${(price * (1 - discount / 100)).toFixed(2)}
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          <Button className="w-full">
+                            <ShoppingCart className="mr-2 h-4 w-4" />
+                            Add to Cart
+                          </Button>
+                        </DialogContent>
+                      </Dialog>
                     </TableCell>
                   </TableRow>
                 );
