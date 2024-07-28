@@ -22,8 +22,8 @@ const Index = () => {
       <div className="palm-leaf palm-leaf-bottom-right"></div>
 
       <header className="bg-white bg-opacity-80 shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="text-2xl font-bold text-primary accent-text">PriceFiji</div>
+        <div className="container mx-auto px-4 py-4 flex flex-col md:flex-row justify-between items-center">
+          <div className="text-2xl font-bold text-primary accent-text mb-4 md:mb-0">PriceFiji</div>
           <nav>
             <ul className="flex space-x-4">
               <li><a href="/" className="text-foreground hover:text-secondary">Home</a></li>
