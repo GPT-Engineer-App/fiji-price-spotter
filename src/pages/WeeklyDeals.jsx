@@ -4,13 +4,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-const Index = () => {
+const WeeklyDeals = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const featuredDeals = [
+  const deals = [
     { id: 1, name: "Fiji Water 1L", oldPrice: 2.50, newPrice: 2.00, image: "/placeholder.svg" },
     { id: 2, name: "Tuna Can 185g", oldPrice: 3.00, newPrice: 2.50, image: "/placeholder.svg" },
     { id: 3, name: "Local Bananas 1kg", oldPrice: 4.00, newPrice: 3.50, image: "/placeholder.svg" },
+    { id: 4, name: "Rice 5kg", oldPrice: 10.00, newPrice: 8.50, image: "/placeholder.svg" },
+    { id: 5, name: "Chicken Breast 1kg", oldPrice: 12.00, newPrice: 10.00, image: "/placeholder.svg" },
+    { id: 6, name: "Toilet Paper 12 Pack", oldPrice: 8.00, newPrice: 7.00, image: "/placeholder.svg" },
   ];
 
   return (
@@ -29,43 +32,37 @@ const Index = () => {
       </header>
 
       <main className="flex-grow container mx-auto px-4 py-8">
-        <section className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Compare Prices Across Fiji</h1>
-          <p className="text-xl text-gray-600 mb-8">Find the best deals on groceries and household items.</p>
-          <div className="max-w-md mx-auto">
-            <Input
-              type="text"
-              placeholder="Search for a product..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="mb-4"
-            />
-            <Button className="w-full">Search</Button>
-          </div>
-        </section>
+        <h1 className="text-3xl font-bold mb-8">Weekly Deals</h1>
+        <div className="mb-8">
+          <Input
+            type="text"
+            placeholder="Search for a deal..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="max-w-md mb-4"
+          />
+          <Button>Search</Button>
+        </div>
 
-        <section>
-          <h2 className="text-2xl font-semibold mb-6">Featured Weekly Deals</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {featuredDeals.map((deal) => (
-              <Card key={deal.id}>
-                <CardContent className="p-4">
-                  <img src={deal.image} alt={deal.name} className="w-full h-48 object-cover mb-4" />
-                  <h3 className="font-semibold text-lg mb-2">{deal.name}</h3>
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-500 line-through">${deal.oldPrice.toFixed(2)}</span>
-                    <span className="text-green-600 font-bold">${deal.newPrice.toFixed(2)}</span>
-                  </div>
-                </CardContent>
-                <CardFooter>
-                  <Badge className="bg-green-100 text-green-800">
-                    Save {(((deal.oldPrice - deal.newPrice) / deal.oldPrice) * 100).toFixed(0)}%
-                  </Badge>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </section>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {deals.map((deal) => (
+            <Card key={deal.id}>
+              <CardContent className="p-4">
+                <img src={deal.image} alt={deal.name} className="w-full h-48 object-cover mb-4" />
+                <h3 className="font-semibold text-lg mb-2">{deal.name}</h3>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-500 line-through">${deal.oldPrice.toFixed(2)}</span>
+                  <span className="text-green-600 font-bold">${deal.newPrice.toFixed(2)}</span>
+                </div>
+              </CardContent>
+              <CardFooter>
+                <Badge className="bg-green-100 text-green-800">
+                  Save {(((deal.oldPrice - deal.newPrice) / deal.oldPrice) * 100).toFixed(0)}%
+                </Badge>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
       </main>
 
       <footer className="bg-gray-100 mt-12">
@@ -81,4 +78,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default WeeklyDeals;
